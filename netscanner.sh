@@ -11,5 +11,7 @@ do
 ping -c 1 "$ip.$i" | grep "64 bytes" | cut -d " " -f 4 | tr -d ":" >> output.txt &
 done
 
+wait #because nmap may run before output.txt is fully written
+
 nmap -sS -Pn -iL output.txt -o result.txt
 exit
