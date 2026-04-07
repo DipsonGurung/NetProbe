@@ -1,0 +1,7 @@
+# Ignore scan outputs
+output/output.txt
+output/sample_result.txt
+
+# Ignore temporary files
+*.log
+*.tmp
