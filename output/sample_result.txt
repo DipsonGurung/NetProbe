@@ -1,0 +1,10 @@
+# Sample Nmap Scan Result
+
+Nmap scan report for 192.168.1.1
+PORT     STATE SERVICE
+22/tcp   open  ssh
+80/tcp   open  http
+
+Nmap scan report for 192.168.1.10
+PORT     STATE SERVICE
+443/tcp  open  https
