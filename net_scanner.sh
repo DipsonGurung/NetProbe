@@ -1,17 +1,24 @@
 #!/usr/bin/zsh
 
-ip=$(ifconfig | grep "broadcast" | cut -d " " -f 10 | cut -d "." -f 1,2,3)
-#ip=$(cat ip.txt)
-#echo "$ip"
+# Get network IP
+ip=$(ip addr | grep "inet " | grep -v "127.0.0.1" | awk '{print $2}' | cut -d "/" -f1 | cut -d "." -f1,2,3)
+
+echo "Scanning network: $ip.0/24"
 
 echo "" > output.txt
 
 for i in {1..254}
 do
-ping -c 1 "$ip.$i" | grep "64 bytes" | cut -d " " -f 4 | tr -d ":" >> output.txt &
+    ping -c 1 "$ip.$i" | grep "64 bytes" | awk '{print $4}' | tr -d ":" >> output.txt &
 done
 
-wait #because nmap may run before output.txt is fully written
+# Wait for all background jobs
+wait
 
-nmap -sS -Pn -iL output.txt -o result.txt
-exit
+echo "Active hosts found:"
+cat output.txt
+
+# Run nmap scan
+nmap -sS -Pn -iL output.txt -oN result.txt
+
+echo "Scan completed. Results saved in result.txt"
